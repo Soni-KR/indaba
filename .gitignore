@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+*.log
+!artifacts/**/*.model.log
+artifacts/live/
+output/
+specification.txt
+models/
+runtime/
+SENTINEL_Specification_Book_IndabaX_Tunisia.pdf
+docs/

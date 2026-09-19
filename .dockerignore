@@ -1,0 +1,10 @@
+.git
+.venv
+artifacts
+output
+starter-kit/.git
+**/__pycache__
+**/.pytest_cache
+*.pdf
+*.log
+

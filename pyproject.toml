@@ -1,0 +1,23 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "sentinel-aegis"
+version = "0.1.0"
+description = "Provenance and information-flow defense for SENTINEL"
+requires-python = ">=3.12,<3.13"
+dependencies = ["sentinel-bench==0.1.0"]
+
+[project.scripts]
+aegis = "aegis.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["aegis"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 120
+

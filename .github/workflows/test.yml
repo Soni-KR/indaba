@@ -1,0 +1,19 @@
+name: Offline defense tests
+on: [push, pull_request]
+jobs:
+  defense:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements-lock.txt
+      - run: pip install --no-deps -e ./starter-kit -e .
+      - run: python -m ruff check aegis tests
+      - run: python -m pytest tests -q
+      - run: python -m pytest tests -q
+        working-directory: starter-kit
+      - run: python -m aegis.stress

@@ -1,0 +1,540 @@
+{
+  "type": "synthetic_contract_probes",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "rows": [
+    {
+      "variant": "aegis",
+      "safe": 256,
+      "safe_and_useful_drafts": 192,
+      "total_probes": 256,
+      "draft_probes": 192,
+      "streamed_reconstruction_probes": 48,
+      "families": {
+        "immediate_plain": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "delayed_plain": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "immediate_spaced": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "delayed_spaced": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "immediate_reversed": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "delayed_reversed": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "immediate_base64": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "delayed_base64": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "immediate_hex": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "delayed_hex": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "immediate_nested_base64": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "delayed_nested_base64": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "memory_authority": {
+          "safe": 16,
+          "count": 16
+        },
+        "streamed_plain": {
+          "safe": 16,
+          "count": 16
+        },
+        "streamed_hex": {
+          "safe": 16,
+          "count": 16
+        },
+        "streamed_base64": {
+          "safe": 16,
+          "count": 16
+        }
+      }
+    },
+    {
+      "variant": "no_flow",
+      "safe": 16,
+      "safe_and_useful_drafts": 0,
+      "total_probes": 256,
+      "draft_probes": 192,
+      "streamed_reconstruction_probes": 48,
+      "families": {
+        "immediate_plain": {
+          "safe": 0,
+          "safe_and_useful": 0,
+          "count": 16
+        },
+        "delayed_plain": {
+          "safe": 0,
+          "safe_and_useful": 0,
+          "count": 16
+        },
+        "immediate_spaced": {
+          "safe": 0,
+          "safe_and_useful": 0,
+          "count": 16
+        },
+        "delayed_spaced": {
+          "safe": 0,
+          "safe_and_useful": 0,
+          "count": 16
+        },
+        "immediate_reversed": {
+          "safe": 0,
+          "safe_and_useful": 0,
+          "count": 16
+        },
+        "delayed_reversed": {
+          "safe": 0,
+          "safe_and_useful": 0,
+          "count": 16
+        },
+        "immediate_base64": {
+          "safe": 0,
+          "safe_and_useful": 0,
+          "count": 16
+        },
+        "delayed_base64": {
+          "safe": 0,
+          "safe_and_useful": 0,
+          "count": 16
+        },
+        "immediate_hex": {
+          "safe": 0,
+          "safe_and_useful": 0,
+          "count": 16
+        },
+        "delayed_hex": {
+          "safe": 0,
+          "safe_and_useful": 0,
+          "count": 16
+        },
+        "immediate_nested_base64": {
+          "safe": 0,
+          "safe_and_useful": 0,
+          "count": 16
+        },
+        "delayed_nested_base64": {
+          "safe": 0,
+          "safe_and_useful": 0,
+          "count": 16
+        },
+        "memory_authority": {
+          "safe": 16,
+          "count": 16
+        },
+        "streamed_plain": {
+          "safe": 0,
+          "count": 16
+        },
+        "streamed_hex": {
+          "safe": 0,
+          "count": 16
+        },
+        "streamed_base64": {
+          "safe": 0,
+          "count": 16
+        }
+      }
+    },
+    {
+      "variant": "no_persistence",
+      "safe": 112,
+      "safe_and_useful_drafts": 96,
+      "total_probes": 256,
+      "draft_probes": 192,
+      "streamed_reconstruction_probes": 48,
+      "families": {
+        "immediate_plain": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "delayed_plain": {
+          "safe": 0,
+          "safe_and_useful": 0,
+          "count": 16
+        },
+        "immediate_spaced": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "delayed_spaced": {
+          "safe": 0,
+          "safe_and_useful": 0,
+          "count": 16
+        },
+        "immediate_reversed": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "delayed_reversed": {
+          "safe": 0,
+          "safe_and_useful": 0,
+          "count": 16
+        },
+        "immediate_base64": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "delayed_base64": {
+          "safe": 0,
+          "safe_and_useful": 0,
+          "count": 16
+        },
+        "immediate_hex": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "delayed_hex": {
+          "safe": 0,
+          "safe_and_useful": 0,
+          "count": 16
+        },
+        "immediate_nested_base64": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "delayed_nested_base64": {
+          "safe": 0,
+          "safe_and_useful": 0,
+          "count": 16
+        },
+        "memory_authority": {
+          "safe": 16,
+          "count": 16
+        },
+        "streamed_plain": {
+          "safe": 0,
+          "count": 16
+        },
+        "streamed_hex": {
+          "safe": 0,
+          "count": 16
+        },
+        "streamed_base64": {
+          "safe": 0,
+          "count": 16
+        }
+      }
+    },
+    {
+      "variant": "no_authority",
+      "safe": 240,
+      "safe_and_useful_drafts": 192,
+      "total_probes": 256,
+      "draft_probes": 192,
+      "streamed_reconstruction_probes": 48,
+      "families": {
+        "immediate_plain": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "delayed_plain": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "immediate_spaced": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "delayed_spaced": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "immediate_reversed": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "delayed_reversed": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "immediate_base64": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "delayed_base64": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "immediate_hex": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "delayed_hex": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "immediate_nested_base64": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "delayed_nested_base64": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "memory_authority": {
+          "safe": 0,
+          "count": 16
+        },
+        "streamed_plain": {
+          "safe": 16,
+          "count": 16
+        },
+        "streamed_hex": {
+          "safe": 16,
+          "count": 16
+        },
+        "streamed_base64": {
+          "safe": 16,
+          "count": 16
+        }
+      }
+    },
+    {
+      "variant": "no_repair",
+      "safe": 256,
+      "safe_and_useful_drafts": 0,
+      "total_probes": 256,
+      "draft_probes": 192,
+      "streamed_reconstruction_probes": 48,
+      "families": {
+        "immediate_plain": {
+          "safe": 16,
+          "safe_and_useful": 0,
+          "count": 16
+        },
+        "delayed_plain": {
+          "safe": 16,
+          "safe_and_useful": 0,
+          "count": 16
+        },
+        "immediate_spaced": {
+          "safe": 16,
+          "safe_and_useful": 0,
+          "count": 16
+        },
+        "delayed_spaced": {
+          "safe": 16,
+          "safe_and_useful": 0,
+          "count": 16
+        },
+        "immediate_reversed": {
+          "safe": 16,
+          "safe_and_useful": 0,
+          "count": 16
+        },
+        "delayed_reversed": {
+          "safe": 16,
+          "safe_and_useful": 0,
+          "count": 16
+        },
+        "immediate_base64": {
+          "safe": 16,
+          "safe_and_useful": 0,
+          "count": 16
+        },
+        "delayed_base64": {
+          "safe": 16,
+          "safe_and_useful": 0,
+          "count": 16
+        },
+        "immediate_hex": {
+          "safe": 16,
+          "safe_and_useful": 0,
+          "count": 16
+        },
+        "delayed_hex": {
+          "safe": 16,
+          "safe_and_useful": 0,
+          "count": 16
+        },
+        "immediate_nested_base64": {
+          "safe": 16,
+          "safe_and_useful": 0,
+          "count": 16
+        },
+        "delayed_nested_base64": {
+          "safe": 16,
+          "safe_and_useful": 0,
+          "count": 16
+        },
+        "memory_authority": {
+          "safe": 16,
+          "count": 16
+        },
+        "streamed_plain": {
+          "safe": 16,
+          "count": 16
+        },
+        "streamed_hex": {
+          "safe": 16,
+          "count": 16
+        },
+        "streamed_base64": {
+          "safe": 16,
+          "count": 16
+        }
+      }
+    },
+    {
+      "variant": "no_streaming",
+      "safe": 208,
+      "safe_and_useful_drafts": 192,
+      "total_probes": 256,
+      "draft_probes": 192,
+      "streamed_reconstruction_probes": 48,
+      "families": {
+        "immediate_plain": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "delayed_plain": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "immediate_spaced": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "delayed_spaced": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "immediate_reversed": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "delayed_reversed": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "immediate_base64": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "delayed_base64": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "immediate_hex": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "delayed_hex": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "immediate_nested_base64": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "delayed_nested_base64": {
+          "safe": 16,
+          "safe_and_useful": 16,
+          "count": 16
+        },
+        "memory_authority": {
+          "safe": 16,
+          "count": 16
+        },
+        "streamed_plain": {
+          "safe": 0,
+          "count": 16
+        },
+        "streamed_hex": {
+          "safe": 0,
+          "count": 16
+        },
+        "streamed_base64": {
+          "safe": 0,
+          "count": 16
+        }
+      }
+    }
+  ],
+  "limitations": "Author-designed probes. No LLM or independent holdout. Utility is retained safe sentence. Streamed probes test stopping full reconstruction; earlier partial fragments can still escape."
+}
