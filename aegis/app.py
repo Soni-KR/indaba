@@ -13,6 +13,7 @@ from sentinel.defenses.interface import DefenseRequest
 
 from aegis.audit import AuditedDefense
 from aegis.defense import AegisDefense
+from aegis.evidence import load_manifest
 
 ROOT = Path(__file__).resolve().parents[1]
 ARTIFACTS = ROOT / "artifacts"
@@ -91,4 +92,4 @@ def read_live_jsonl(path):
 
 @app.get("/api/reports")
 def reports():
-    return [json.loads(p.read_text(encoding="utf-8")) for p in sorted(ARTIFACTS.glob("*/manifest.json"), reverse=True)]
+    return [load_manifest(p) for p in sorted(ARTIFACTS.glob("*/manifest.json"), reverse=True)]

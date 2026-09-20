@@ -10,3 +10,7 @@ if ($LASTEXITCODE -ne 0) { throw 'Static experiment failed.' }
 if ($LASTEXITCODE -ne 0) { throw 'Adaptive experiment failed.' }
 & $aegisPython -m aegis.stress
 if ($LASTEXITCODE -ne 0) { throw 'Stress experiment failed.' }
+& $aegisPython scripts/build_demo_plan.py
+if ($LASTEXITCODE -ne 0) { throw 'Validated demo selection failed.' }
+& $aegisPython scripts/build_report.py
+if ($LASTEXITCODE -ne 0) { throw 'Report generation failed.' }

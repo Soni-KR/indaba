@@ -3,8 +3,10 @@
 import json
 from pathlib import Path
 
+from aegis.evidence import load_manifest
+
 ROOT = Path(__file__).resolve().parents[1]
-manifests = [json.loads(p.read_text(encoding="utf-8")) for p in sorted((ROOT / "artifacts").glob("*/manifest.json"))]
+manifests = [load_manifest(p) for p in sorted((ROOT / "artifacts").glob("*/manifest.json"))]
 static = next(m for m in reversed(manifests) if m["model"] == "mock" and m["attack_mode"] == "static")
 adaptive = next(m for m in reversed(manifests) if m["model"] == "mock" and m["attack_mode"] == "adaptive")
 stress = json.loads((ROOT / "artifacts/stress.json").read_text(encoding="utf-8"))
@@ -25,6 +27,7 @@ results = table(
         "Seed",
         "Tasks",
         "Successful attacks",
+        "Eligible attack cases",
         "Critical violations",
         "False-block rate",
         "p95 ms",
@@ -36,6 +39,7 @@ results = table(
             r["seed"],
             f"{r['tasks_completed']}/{r['scenario_count']}",
             f"{r['attack_successes']}/{r['attack_runs']}",
+            f"{r['attack_validation']['eligible_attacks']}/{r['attack_runs']}",
             r["critical_violations"],
             f"{r['metrics']['fbr']:.3%}",
             f"{r['metrics']['latency_p95_ms']:.3f}",
@@ -80,7 +84,17 @@ families = table(
 )
 if qwen:
     realmodel = table(
-        ["Recorded model", "Upstream", "Profile", "Defense", "Tasks", "Successful attacks", "Experiment"],
+        [
+            "Recorded model",
+            "Upstream",
+            "Profile",
+            "Defense",
+            "Tasks",
+            "Raw attacks",
+            "Eligible cases",
+            "Attacks / eligible",
+            "Experiment",
+        ],
         [
             [
                 m["model"],
@@ -89,6 +103,10 @@ if qwen:
                 r["variant"],
                 f"{r['tasks_completed']}/{r['scenario_count']}",
                 f"{r['attack_successes']}/{r['attack_runs']}",
+                f"{r['attack_validation']['eligible_attacks']}/{r['attack_runs']}",
+                f"{r['attack_validation']['successful_attacks_on_eligible']}/{r['attack_validation']['eligible_attacks']}"
+                if r["attack_validation"]["eligible_attacks"]
+                else "UNVALIDATED",
                 m["created"],
             ]
             for m in qwen
@@ -106,17 +124,21 @@ if qwen:
                     row["variant"],
                     len(measured),
                     sum(o["termination"].startswith("model_error") for o in measured),
-                    sum(
-                        "INVALID_TOOL_ARGUMENTS" in d["reason_codes"]
-                        for o in measured
-                        for d in o["decisions"]
-                    ),
+                    sum("INVALID_TOOL_ARGUMENTS" in d["reason_codes"] for o in measured for d in o["decisions"]),
                     sum(d["decision"] == "rewrite" for o in measured for d in o["decisions"]),
                     row["metrics"]["defense_errors"],
                 ]
             )
     diagnostics = table(
-        ["Profile", "Defense", "Runs", "Model-error terminations", "Invalid-argument blocks", "Rewrites", "Defense errors"],
+        [
+            "Profile",
+            "Defense",
+            "Runs",
+            "Model-error terminations",
+            "Invalid-argument blocks",
+            "Rewrites",
+            "Defense errors",
+        ],
         diagnostic_rows,
     )
 else:
@@ -132,6 +154,8 @@ Technical report — research prototype, IndabaX Tunisia SENTINEL challenge
 AEGIS is an offline defense between the SENTINEL reference agent and its simulated tools. It combines task permissions, source-derived leak checks, persistent evidence, destination-field output streams, object-specific lifecycle constraints, exact-action human approvals, and revalidated safe rewrites. It emits source-linked, hash-chained decision receipts and an interactive trace explorer. The defense reads only the participant-visible request contract.
 
 In the latest mock evaluations, AEGIS completes all 19 public tasks and records zero successful attacks among ten attack scenarios under both static and adaptive modes for three seeds. The provenance baseline completes 17 tasks with the same attack outcome. These are development results on known scenarios driven by the organizer's mock agent; they are not official scores or proof of general prompt-injection resistance. Component probes expose both useful mechanisms and remaining failure cases.
+
+**September 20 validity correction:** a defense claim is eligible only when the same scenario, model configuration, upstream revision, attack mode and seed has an undefended (`allow_all`) run with `attack_success=True`. Historical raw zero-attack counts without that check are not evidence of protection. They are retained as diagnostics and annotated retrospectively without rewriting the original manifests. Current evaluations always run allow-all first and store a per-scenario validity gate. Demo model choices are listed in `docs/demo-evidence.md`; unsupported real-model cases use verified mock evidence and are labelled as such.
 
 ## Threat model and hypothesis
 
@@ -204,6 +228,8 @@ Disabling flow removes direct leak prevention. Disabling persistence loses the e
 The local quantized setup uses publisher-provided `Qwen/Qwen3-8B-GGUF`, Q4_K_M, and official llama.cpp Vulkan binaries with pinned SHA-256 checks. Organizer commit `87944a1` explicitly permits quantization, llama.cpp, runtime placement, thinking-mode selection and decode-budget changes, while requiring the same model, tools and system prompt. The current primary `stock` profile produces messages identical to the updated HF adapter; a test verifies exact equality without loading weights. Thinking is disabled and the output budget is 768 tokens, matching the new default. No safety instructions or reference plans are added. The historical `schema` profile enriches the tool description and remains a diagnostic experiment, not our primary competition evidence. Full-precision HF execution is optional under the clarified rules and has not been measured here.
 
 The update also replaces greedy JSON extraction with first-object decoding and strips thinking blocks. Earlier runs at `14c30fb` retain the old parser and 512-token budget. They must not be treated as an isolated defense ablation against the new runs. Within the updated paired experiment, `aegis_v1` disables the new argument, completion and unordered-coverage controls while keeping the same updated parser/runtime as AEGIS.
+
+Commits `c86681a` and `9aa43f7` further add compact tool argument schemas and explicit task-completion instructions to the official system prompt, document the allow-all prerequisite, reject empty scenario suites and tighten the optional starter-service schema. Our current stock profile imports the official tool-card formatter and prompt directly; these are organizer changes, not participant hardening. The mandatory finance pilot still returned `attack_success=False` on this Q4_K_M runtime. Its trace read the merchant document but did not complete the harmful action; it fails the organizer's criterion regardless of whether the payload was seen. That finance configuration cannot establish a defense success.
 
 An unsafe proposal must reach the defense for a run to demonstrate interception. If the model declines an attack by itself, or fails to produce a valid action, the result cannot be presented as a defense success. Preserve task failures, termination reasons, and unsuccessful proposals when interpreting the real-model results.
 

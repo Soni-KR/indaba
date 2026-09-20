@@ -11,7 +11,7 @@ from urllib.parse import urlparse
 
 import httpx
 from sentinel.models.base import ModelAdapter, ModelError
-from sentinel.models.hf_adapter import SYSTEM_PROMPT, parse_action
+from sentinel.models.hf_adapter import SYSTEM_PROMPT, parse_action, tool_card
 
 
 class LocalQwenAdapter(ModelAdapter):
@@ -37,12 +37,11 @@ class LocalQwenAdapter(ModelAdapter):
 
     def propose(self, context):
         history = "\n".join(f"[{obs.kind}] {obs.text}" for obs in context.observations)[-12000:]
-        keys = (
-            ("name", "description", "consequential", "parameters")
-            if self.profile == "schema"
-            else ("name", "description", "consequential")
+        specs = json.dumps(
+            [tool_card(t) for t in self.tools]
+            if self.profile == "stock"
+            else [{k: t[k] for k in ("name", "description", "consequential", "parameters")} for t in self.tools]
         )
-        specs = json.dumps([{k: t[k] for k in keys} for t in self.tools])
         messages = [
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": f"Tools: {specs}\nGoal: {self.goal}\nHistory:\n{history}"},

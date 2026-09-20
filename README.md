@@ -2,11 +2,13 @@
 
 AEGIS sits between the SENTINEL agent and its tools. It checks active permissions, tracks observed sensitive data across history truncation, requires approvals for exact consequential actions, and repairs safe content when possible. Every decision produces a source-linked, hash-chained receipt.
 
-**Development evidence:** the offline mock agent completed **19/19 published tasks**, with **0/10 successful attacks**, for seeds 0, 11, and 29 under static and adaptive attacks. The provenance baseline completed 17/19. These are local diagnostics, not official scores or evidence of Qwen3-8B robustness.
+**Development evidence:** the offline mock agent completed **19/19 published tasks** for seeds 0, 11, and 29 under static and adaptive attacks. Static allow-all checks validate all ten attacks; adaptive checks validate nine, with split settlement excluded. AEGIS prevents every validated attack in those runs. The provenance baseline completes 17/19 tasks. These are local diagnostics, not official scores or proof of general Qwen robustness.
 
-**Real-model evidence:** in one full 19-scenario run using local Qwen3-8B Q4_K_M with public tool schemas, AEGIS recorded **0/10 successful attacks and 3/19 completed tasks**; allow-all recorded 2/10 attacks and 4/19 tasks; the provenance baseline recorded 0/10 attacks and 4/19 tasks. The real invoice trace shows AEGIS removing a proposed token disclosure, but Qwen failed to create the required draft. These results expose substantial utility limitations and do not establish superiority over the provenance baseline.
+**Evidence validity:** attack claims now require `attack_success=True` in a paired `allow_all` run for the same scenario and configuration. Earlier raw zero-attack numbers are historical diagnostics, not automatically evidence of protection. The updated Qwen finance pilot failed that prerequisite. Use the generated [validated demo plan](docs/demo-evidence.md) to choose explicitly labelled Qwen or mock evidence.
 
-**September 19 update:** pinned organizer revision `87944a1` adds Qwen runtime and parser fixes and explicitly permits quantized local runtimes. Primary new evaluations use its unchanged agent prompt. AEGIS now repairs unambiguous read arguments, qualifies unsupported completion claims, and detects more reordered credential fragments. Full-precision HF testing is an optional comparison, not a prerequisite under the clarified rules.
+**Current Qwen comparison:** at `9aa43f7`, the updated stock prompt completes 6/19 tasks with AEGIS, 6/19 with the earlier controls, and 7/19 with provenance. Only the direct-token scenario passes the Qwen undefended-attack prerequisite; AEGIS prevents its attack but the legitimate task fails. The other nine attack scenarios use validated mock demonstrations. The new controls improve the targeted stress results, but this run does not establish better real-model task utility.
+
+**September 20 update:** pinned organizer revision `9aa43f7` includes Qwen runtime/parser fixes, compact argument schemas, completion instructions, strict starter-service models, and the mandatory undefended-attack check. Primary new evaluations use its unchanged agent prompt. AEGIS now repairs unambiguous read arguments, qualifies unsupported completion claims, and detects more reordered credential fragments. Full-precision HF testing is an optional comparison, not a prerequisite under the clarified rules.
 
 **Submission status:** working defense, dashboard, mock and quantized-Qwen experiments, technical report, beginner guide, and video storyboard are included. Stronger real-model task completion, the final recorded video, team details, and repository publication remain outstanding. Winning cannot be guaranteed.
 
@@ -81,5 +83,5 @@ Two deliberately failing security expectations are marked `xfail(strict=True)`: 
 | `starter-kit/` | Unmodified organizer repository, pinned git submodule |
 | `docs/` | Report, safety statement, recording plan and remaining validation |
 
-Organizer source: https://github.com/Skan22/Sentinel_Starter_Kit, commit `87944a1bbb4565fac853e017dac2727b0f377704`. Its Apache-2.0 notice is retained in the submodule. Earlier evidence retains its original `14c30fb` revision. No external dataset or learned defense model was used.
+Organizer source: https://github.com/Skan22/Sentinel_Starter_Kit, commit `9aa43f731749cf1a039c5b62d49507696d54bf6c`. Its Apache-2.0 notice is retained in the submodule. Earlier evidence retains its original `14c30fb` revision. No external dataset or learned defense model was used.
 

@@ -17,6 +17,7 @@ from sentinel.storage.runs import ArtifactStore
 
 from aegis.audit import AuditedDefense, verify
 from aegis.defense import AegisDefense
+from aegis.evidence import attack_gate
 
 ROOT = Path(__file__).resolve().parents[1]
 VARIANTS = {
@@ -57,8 +58,11 @@ def run(variants=None, seeds=(0,), adaptive=False, model_path=None, model_url=No
         if {s.id for s in suite} != selected:
             raise ValueError("Requested scenario is not in the public suite")
     reports = []
+    requested = list(variants or ["allow_all", "provenance", *VARIANTS])
+    requested = ["allow_all", *[v for v in requested if v != "allow_all"]]
     for seed in seeds:
-        for variant in variants or ["allow_all", "provenance", *VARIANTS]:
+        baseline = []
+        for variant in requested:
 
             def factory(variant=variant, seed=seed):
                 inner = AegisDefense(**VARIANTS[variant]) if variant in VARIANTS else get_baseline(variant)
@@ -86,6 +90,8 @@ def run(variants=None, seeds=(0,), adaptive=False, model_path=None, model_url=No
                 config.include_reference_plan = False
             report = evaluate(suite, factory, config, MutationAttacker if adaptive else StaticAttacker)
             view = report.participant_view()
+            if variant == "allow_all":
+                baseline = view["outcomes"]
             (output / f"{variant}-s{seed}.json").write_text(json.dumps(view, indent=2), encoding="utf-8")
             families = defaultdict(lambda: {"runs": 0, "tasks_completed": 0, "attack_successes": 0})
             for outcome in view["outcomes"]:
@@ -105,11 +111,18 @@ def run(variants=None, seeds=(0,), adaptive=False, model_path=None, model_url=No
                 "families": dict(families),
                 "digest": view["deterministic_digest"],
                 "audit": verify(output / f"{variant}-s{seed}.audit.jsonl"),
+                "attack_validation": attack_gate(view["outcomes"], baseline),
             }
             reports.append(row)
             print(
                 f"{variant} seed={seed}: tasks {row['tasks_completed']}/{row['scenario_count']}; "
                 f"attack successes {row['attack_successes']}/{row['attack_runs']}",
+                flush=True,
+            )
+            gate = row["attack_validation"]
+            print(
+                f"  Attack validity: {gate['eligible_attacks']}/{row['attack_runs']} exercised by allow_all; "
+                f"{gate['unvalidated_attacks']} excluded from defense claims.",
                 flush=True,
             )
     manifest = {
@@ -120,7 +133,8 @@ def run(variants=None, seeds=(0,), adaptive=False, model_path=None, model_url=No
         "model_profile": profile if model_url else None,
         "reference_prompt_unchanged": profile == "stock" if model_url else None,
         "runtime_settings": {"max_new_tokens": 768, "enable_thinking": False, "temperature": 0, "model_seed": 0}
-        if model_url else None,
+        if model_url
+        else None,
         "model_setup": json.loads((ROOT / "models/setup-manifest.json").read_text(encoding="utf-8"))
         if model_url and (ROOT / "models/setup-manifest.json").exists()
         else None,
