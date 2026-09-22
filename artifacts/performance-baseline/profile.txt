@@ -1,0 +1,48 @@
+         11890500 function calls (11840132 primitive calls) in 2.272 seconds
+
+   Ordered by: cumulative time
+   List reduced from 998 to 40 due to restriction <40>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    2.272    2.272 experiments.py:56(run)
+        2    0.001    0.000    1.863    0.932 runner.py:399(evaluate)
+        6    0.001    0.000    1.857    0.310 runner.py:269(run_scenario)
+        6    0.001    0.000    1.800    0.300 reference.py:185(run)
+       32    0.000    0.000    1.720    0.054 reference.py:294(_step)
+       32    0.000    0.000    1.706    0.053 reference.py:154(_decide)
+       32    0.001    0.000    1.705    0.053 audit.py:49(decide)
+      348    0.066    0.000    1.621    0.005 flow.py:141(redact)
+     1396    0.035    0.000    1.323    0.001 flow.py:115(matches)
+    67183    0.240    0.000    1.177    0.000 {method 'join' of 'str' objects}
+     6318    0.003    0.000    0.979    0.000 __init__.py:179(sub)
+    36813    0.015    0.000    0.890    0.000 flow.py:24(compact)
+   668/64    0.001    0.000    0.883    0.014 audit.py:18(scrub)
+     6791    0.007    0.000    0.863    0.000 {method 'sub' of 're.Pattern' objects}
+     1016    0.001    0.000    0.856    0.001 flow.py:146(<lambda>)
+  2030568    0.424    0.000    0.714    0.000 flow.py:25(<genexpr>)
+       46    0.000    0.000    0.313    0.007 __init__.py:117(safe_load)
+       46    0.001    0.000    0.313    0.007 __init__.py:74(load)
+    18747    0.008    0.000    0.311    0.000 flow.py:19(skeleton)
+       46    0.000    0.000    0.311    0.007 constructor.py:47(get_single_data)
+        1    0.000    0.000    0.305    0.305 runner.py:387(load_suite)
+       40    0.000    0.000    0.303    0.008 scenario.py:333(load_scenario)
+       46    0.000    0.000    0.296    0.006 composer.py:29(get_single_node)
+       46    0.000    0.000    0.292    0.006 composer.py:50(compose_document)
+  6200/46    0.008    0.000    0.292    0.006 composer.py:63(compose_node)
+   606/46    0.003    0.000    0.291    0.006 composer.py:117(compose_mapping_node)
+    18821    0.006    0.000    0.268    0.000 parser.py:94(check_event)
+       16    0.000    0.000    0.228    0.014 defense.py:126(decide)
+    19/16    0.001    0.000    0.226    0.014 defense.py:178(_decide)
+  1081990    0.139    0.000    0.222    0.000 flow.py:21(<genexpr>)
+    46270    0.019    0.000    0.214    0.000 scanner.py:113(check_token)
+  489/348    0.001    0.000    0.211    0.001 composer.py:99(compose_sequence_node)
+        3    0.000    0.000    0.178    0.059 defense.py:390(_repair)
+  2405844    0.173    0.000    0.173    0.000 {method 'isalnum' of 'str' objects}
+     8750    0.012    0.000    0.158    0.000 scanner.py:156(fetch_more_tokens)
+  1993771    0.141    0.000    0.141    0.000 {method 'casefold' of 'str' objects}
+     2621    0.003    0.000    0.124    0.000 parser.py:446(parse_block_mapping_value)
+   287220    0.061    0.000    0.123    0.000 __init__.py:255(escape)
+     8139    0.007    0.000    0.117    0.000 __init__.py:280(_compile)
+       92    0.000    0.000    0.106    0.001 _compiler.py:745(compile)
+
+

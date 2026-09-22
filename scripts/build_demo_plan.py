@@ -20,6 +20,14 @@ def latest(model):
         if m["reference_commit"] == revision
         and m["model"] == model
         and m["attack_mode"] == "static"
+        and (
+            model == "mock"
+            or any(
+                r.get("attack_validation", {}).get("eligible_attacks", 0) > 0
+                for r in m["reports"]
+                if r["variant"] == "aegis"
+            )
+        )
         and any(
             r["variant"] == "aegis" and r["seed"] == 0 and (model != "mock" or r["scenario_count"] == suite_size)
             for r in m["reports"]
@@ -35,7 +43,7 @@ if not mock:
 
 
 def defense_hashes(manifest):
-    names = {"aegis/defense.py", "aegis/flow.py", "aegis/repairs.py"}
+    names = {"aegis/defense.py", "aegis/flow.py", "aegis/repairs.py", "aegis/confusables.json"}
     return {
         name.replace("\\", "/"): digest
         for name, digest in manifest["solution_hashes"].items()
@@ -87,7 +95,7 @@ for name, fallback in sorted(mock_cases.items()):
 
 result = {
     "reference_commit": revision,
-    "selection": "per-scenario allow-all prerequisite; no hidden outcome filtering",
+    "selection": "latest eligible pilot and current full mock suite; prior connection-failure runs retained in reports; no filtering on defended success",
     "cases": rows,
 }
 (ROOT / "artifacts/demo-plan.json").write_text(json.dumps(result, indent=2), encoding="utf-8")

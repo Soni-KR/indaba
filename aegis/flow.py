@@ -3,17 +3,30 @@
 from __future__ import annotations
 
 import base64
+import codecs
 import json
 import re
 import unicodedata
 from dataclasses import dataclass
+from functools import cached_property
+from pathlib import Path
 from urllib.parse import unquote
 
 KEY = re.compile(r"(?:secret|token|credential|password|api.?key|iban|account.?number)", re.IGNORECASE)
 TOKEN = re.compile(r"[A-Za-z0-9][A-Za-z0-9_+./=-]{11,}")
+CONFUSABLES = json.loads(Path(__file__).with_name("confusables.json").read_text(encoding="utf-8"))["mapping"]
+
+
+def skeleton(text: str) -> str:
+    """Pinned, partial Unicode skeleton; only used to compare known credentials."""
+    if text.isascii():
+        return text
+    return "".join(CONFUSABLES.get(c, c) for c in unicodedata.normalize("NFKC", text))
 
 
 def compact(text: str) -> str:
+    if text.isascii():
+        return re.sub(r"[^A-Za-z0-9]", "", text).lower()
     return "".join(c.casefold() for c in unicodedata.normalize("NFKC", text) if c.isalnum())
 
 
@@ -34,6 +47,23 @@ class Secret:
     source: str
     sensitivity: str
     credential: bool
+
+    @cached_property
+    def representations(self):
+        # Owned by this secret/session, never retained in a process-global cache.
+        return tuple(
+            (encoding, value, compact(value.rstrip("=")), compact(skeleton(value.rstrip("="))))
+            for encoding, value in variants(self.value)
+        )
+
+    @cached_property
+    def redaction_patterns(self):
+        patterns = []
+        for _, value, _, _ in self.representations:
+            chars = [re.escape(c) for c in value.rstrip("=") if c.isalnum()]
+            if len(chars) >= 8:
+                patterns.append(re.compile(r"[\W_]*".join(chars), re.IGNORECASE))
+        return tuple(patterns)
 
 
 def extract_secrets(content: str, source: str, sensitivity: str) -> list[Secret]:
@@ -68,19 +98,30 @@ def variants(value: str) -> list[tuple[str, str]]:
         ("base64", base64.b64encode(raw).decode()),
         ("base64url", base64.urlsafe_b64encode(raw).decode()),
         ("hex", raw.hex()),
+        ("base32", base64.b32encode(raw).decode()),
+        ("rot13", codecs.encode(value, "rot_13")),
     ]
 
 
 def decoded_views(text: str):
     yield text
     current = {text}
+    seen = {text}
     for _ in range(2):
         next_views = set()
         for item in current:
+            rotated = codecs.encode(item, "rot_13")
+            if rotated != item:
+                next_views.add(rotated)
             decoded = unquote(item)
             if decoded != item:
                 next_views.add(decoded)
             for token in re.findall(r"[A-Za-z0-9_+/=-]{16,}", item):
+                if re.fullmatch(r"[A-Za-z2-7]+={0,6}", token):
+                    try:
+                        next_views.add(base64.b32decode(token + "=" * (-len(token) % 8), casefold=True).decode())
+                    except (ValueError, UnicodeError):
+                        pass
                 try:
                     next_views.add(base64.b64decode(token + "=" * (-len(token) % 4), altchars=b"-_").decode())
                 except (ValueError, UnicodeError):
@@ -90,18 +131,32 @@ def decoded_views(text: str):
                         next_views.add(bytes.fromhex(token).decode())
                     except (ValueError, UnicodeError):
                         pass
+        next_views.difference_update(seen)
+        seen.update(next_views)
         yield from sorted(next_views)
         current = next_views
 
 
 def matches(text: str, secrets: list[Secret]) -> list[tuple[Secret, str]]:
-    views = [compact(v) for v in decoded_views(text)]
+    if not secrets:
+        return []
+    decoded = list(decoded_views(text))
+    views = [compact(v) for v in decoded]
+    credential_views = []
+    if any(s.credential for s in secrets):
+        normalized_text = skeleton(text)
+        credential_views = [
+            compact(skeleton(v)) for v in (decoded if normalized_text == text else decoded_views(normalized_text))
+        ]
     result = []
     for secret in secrets:
-        for encoding, value in variants(secret.value):
-            needle = compact(value.rstrip("="))
-            if len(needle) >= 8 and any(needle in view for view in views):
-                result.append((secret, encoding))
+        for encoding, value, needle, normalized in secret.representations:
+            found = len(needle) >= 8 and any(needle in view for view in views)
+            confusable = (
+                secret.credential and len(normalized) >= 8 and any(normalized in view for view in credential_views)
+            )
+            if found or confusable:
+                result.append((secret, encoding if found else encoding + "_unicode_skeleton"))
                 break
     return result
 
@@ -110,17 +165,13 @@ def redact(text: str, secrets: list[Secret]) -> str:
     result = text
     # Remove encoded envelopes while preserving surrounding useful prose.
     result = re.sub(
-        r"[A-Za-z0-9_+/=%-]{16,}",
+        r"[\w+/=%-]{8,}",
         lambda match: "[REDACTED]" if matches(match.group(), secrets) else match.group(),
         result,
     )
     for secret in secrets:
-        for _, value in variants(secret.value):
-            # Preserve surrounding prose; tolerate punctuation/whitespace insertion.
-            chars = [re.escape(c) for c in value.rstrip("=") if c.isalnum()]
-            if len(chars) >= 8:
-                pattern = r"[\W_]*".join(chars)
-                result = re.sub(pattern, "[REDACTED]", result, flags=re.IGNORECASE)
+        for pattern in secret.redaction_patterns:
+            result = pattern.sub("[REDACTED]", result)
     if matches(result, secrets):
         return "[Sensitive content withheld; use a nonsensitive summary.]"
     return result
@@ -158,8 +209,7 @@ def unordered_disclosures(previous, candidate, secrets, *, tiny_fragments=True):
         # Restrict coverage heuristics to compact identifiers, not ordinary prose windows.
         if not secret.credential or not re.fullmatch(r"[A-Za-z0-9_+./=-]{12,128}", secret.value):
             continue
-        for encoding, value in variants(secret.value):
-            needle = compact(value.rstrip("="))
+        for encoding, value, needle, _ in secret.representations:
             if len(needle) < 16:
                 continue
             groups = {}

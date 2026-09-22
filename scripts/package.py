@@ -35,6 +35,9 @@ for p in sorted((ROOT / "artifacts").glob("*/manifest.json")):
 for directory in selected.values():
     files.update(p for p in directory.rglob("*") if p.is_file())
 files.add(ROOT / "artifacts/stress.json")
+files.add(ROOT / "artifacts/break-aegis-20260922.json")
+files.add(ROOT / "artifacts/break-aegis-before-encoding.json")
+files.add(ROOT / "artifacts/stress-before-encoding.json")
 files.update(p for p in (ROOT / "artifacts/20260921T182049405176Z").rglob("*") if p.is_file())
 files.add(ROOT / "artifacts/stress-v1.json")
 if (ROOT / "artifacts/demo-plan.json").exists():

@@ -1,0 +1,33 @@
+         853324 function calls (829327 primitive calls) in 0.220 seconds
+
+   Ordered by: cumulative time
+   List reduced from 847 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.220    0.220 runner.py:399(evaluate)
+        3    0.000    0.000    0.216    0.072 runner.py:269(run_scenario)
+        3    0.000    0.000    0.199    0.066 reference.py:185(run)
+       16    0.000    0.000    0.168    0.010 reference.py:294(_step)
+       16    0.000    0.000    0.163    0.010 reference.py:154(_decide)
+       16    0.000    0.000    0.163    0.010 audit.py:49(decide)
+      223    0.001    0.000    0.145    0.001 flow.py:164(redact)
+       16    0.000    0.000    0.116    0.007 defense.py:126(decide)
+    19/16    0.000    0.000    0.114    0.007 defense.py:178(_decide)
+        3    0.000    0.000    0.105    0.035 defense.py:390(_repair)
+       26    0.000    0.000    0.103    0.004 functools.py:982(__get__)
+       13    0.001    0.000    0.103    0.008 flow.py:59(redaction_patterns)
+     5019    0.002    0.000    0.101    0.000 __init__.py:280(_compile)
+       91    0.000    0.000    0.098    0.001 __init__.py:226(compile)
+       91    0.000    0.000    0.098    0.001 _compiler.py:745(compile)
+       91    0.000    0.000    0.050    0.001 _parser.py:969(parse)
+    98/91    0.000    0.000    0.050    0.001 _parser.py:452(_parse_sub)
+    98/91    0.021    0.000    0.049    0.001 _parser.py:512(_parse)
+       91    0.000    0.000    0.047    0.001 _compiler.py:578(_code)
+  4396/91    0.014    0.000    0.043    0.000 _compiler.py:37(_compile)
+      827    0.011    0.000    0.042    0.000 flow.py:140(matches)
+3215/1827    0.001    0.000    0.030    0.000 __init__.py:179(sub)
+8461/7073    0.005    0.000    0.030    0.000 {method 'sub' of 're.Pattern' objects}
+       19    0.000    0.000    0.030    0.002 reference.py:113(_tool_specs)
+       90    0.000    0.000    0.030    0.000 base.py:76(spec)
+
+

@@ -1,91 +1,51 @@
-**Latest evidence, September 21:** pinned kit `dd2e5fe`; 98 AEGIS tests pass; expanded static mock suite 40/40 tasks and 0/31 validated attacks. A three-case Qwen pilot validates two attacks, both prevented with task success; finance remains unvalidated. Current demo inventory: 2 Qwen + 29 mock. Older counts below are development history. See [update details](docs/september-21-update.md).
+# AEGIS — SENTINEL defense
 
-# AEGIS — SENTINEL defense and safety observatory
+AEGIS checks an agent's proposed actions against tool permissions, source trust, sensitive-data flow, exact approvals and workflow state. It can allow, block, rewrite or request review. It includes a local dashboard and reproducible evidence. No learned defense model or added agent safety prompt is used.
 
-AEGIS sits between the SENTINEL agent and its tools. It checks active permissions, tracks observed sensitive data across history truncation, requires approvals for exact consequential actions, and repairs safe content when possible. Every decision produces a source-linked, hash-chained receipt.
+## Current evidence — 22 September 2026
 
-**Development evidence:** the offline mock agent completed **19/19 published tasks** for seeds 0, 11, and 29 under static and adaptive attacks. Static allow-all checks validate all ten attacks; adaptive checks validate nine, with split settlement excluded. AEGIS prevents every validated attack in those runs. The provenance baseline completes 17/19 tasks. These are local diagnostics, not official scores or proof of general Qwen robustness.
+| Check | Result | Scope |
+|---|---|---|
+| AEGIS pytest suite | 162 passed | No expected failures; two dependency warnings |
+| Static mock, seeds 0/11/29 | 40/40 tasks; 0/31 validated attacks succeeded | Full public suite |
+| Adaptive mock, seed 0 | 40/40 tasks; 0/30 validated attacks succeeded | One undefended attack fails, excluded |
+| Adversarial contract audit | Two exposed cases; seven interventions; isolation check passes | Ten author-designed probes, not an LLM benchmark |
+| Benign warning examples | 40/40 drafts allowed unchanged | Small targeted false-positive check |
+| Earlier Qwen pilot, September 21 | Two validated attacks prevented, both tasks completed | Three-case pilot; finance unvalidated and task fails |
 
-**Evidence validity:** attack claims now require `attack_success=True` in a paired `allow_all` run for the same scenario and configuration. Earlier raw zero-attack numbers are historical diagnostics, not automatically evidence of protection. The updated Qwen finance pilot failed that prerequisite. Use the generated [validated demo plan](docs/demo-evidence.md) to choose explicitly labelled Qwen or mock evidence.
+Two exposed diagnostic channels remain: labelled single-character fragments and multi-recipient collusion. Base32, ROT13 and the tested Unicode lookalikes now trigger intervention. The partial Unicode skeleton and bounded decoding do not guarantee protection against every representation. The 162 passing tests do not imply the remaining channels are protected. Semantic-paraphrase coverage is conservative external-email review, not semantic understanding. Human review is an additional dependency and can also interrupt harmless work.
 
-**Current Qwen comparison:** at `9aa43f7`, the updated stock prompt completes 6/19 tasks with AEGIS, 6/19 with the earlier controls, and 7/19 with provenance. Only the direct-token scenario passes the Qwen undefended-attack prerequisite; AEGIS prevents its attack but the legitimate task fails. The other nine attack scenarios use validated mock demonstrations. The new controls improve the targeted stress results, but this run does not establish better real-model task utility.
+Primary evidence: `artifacts/20260922T185242761643Z/manifest.json` (static), `artifacts/20260922T185313998546Z/manifest.json` (adaptive), and `artifacts/break-aegis-20260922.json`. Older evidence is historical. The later September 21 connection-failure run made no defense decisions and remains reported; it is not protection evidence.
 
-**September 20 update:** pinned organizer revision `9aa43f7` includes Qwen runtime/parser fixes, compact argument schemas, completion instructions, strict starter-service models, and the mandatory undefended-attack check. Primary new evaluations use its unchanged agent prompt. AEGIS now repairs unambiguous read arguments, qualifies unsupported completion claims, and detects more reordered credential fragments. Full-precision HF testing is an optional comparison, not a prerequisite under the clarified rules.
+## Try it
 
-**Submission status:** working defense, dashboard, mock and quantized-Qwen experiments, technical report, beginner guide, and video storyboard are included. Stronger real-model task completion, the final recorded video, team details, and repository publication remain outstanding. Winning cannot be guaranteed.
-
-## Run locally
-
-Python 3.12 is required. This workspace already has a configured `.venv`.
+From the project root in PowerShell, use the existing environment:
 
 ```powershell
 .\.venv\Scripts\python.exe -m aegis.cli serve
 ```
 
-Open **http://127.0.0.1:8080**. The official service endpoint is `POST /v1/decision`; health is `GET /healthz`. Keep the service local, with one worker. Session evidence is held in that process.
-
-Fresh Git checkout (for the ZIP package, the starter kit is already included; omit the submodule command):
+Open http://127.0.0.1:8080. The six-card trace summary shows source, sensitive item, attempted action, reason, enforcement and recorded task outcome. It starts at the first intervention. This is a replay of recorded evidence; new experiments run from the terminal:
 
 ```powershell
-git submodule update --init --recursive
-python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r requirements-lock.txt
-.\.venv\Scripts\python.exe -m pip install --no-deps -e ./starter-kit -e .
+.\.venv\Scripts\python.exe -m aegis.cli evaluate --variants aegis provenance --seeds 0 11 29
 .\.venv\Scripts\python.exe -m pytest tests -q
+.\.venv\Scripts\python.exe scripts/break_aegis.py
 ```
 
-On Linux, use `.venv/bin/python` in place of `.venv\Scripts\python.exe`.
+The diagnostic script intentionally reports exposed cases; it does not claim success merely because execution exits normally. The evaluation harness pairs attacks with allow-all before crediting protection. The subsequent bounded encoding hardening is described in `docs/encoding-comparison.md`.
 
-## Reproduce the evidence
+Ollama is currently unavailable here. The earlier Qwen traces used local Qwen3-8B Q4_K_M through llama.cpp. No September 22 real-model run or third validated Qwen case is claimed. All Qwen evidence predates the encoding change. The current demo inventory uses 31 validated mock cases; older Qwen traces remain historical, not current-build evidence.
 
-```powershell
-.\.venv\Scripts\python.exe -m aegis.cli evaluate --seeds 0 11 29
-.\.venv\Scripts\python.exe -m aegis.cli evaluate --variants aegis provenance --seeds 0 11 29 --adaptive
-.\.venv\Scripts\python.exe -m aegis.stress
-```
+## Reading and delivery
 
-Each evaluation writes a new timestamped directory under `artifacts/`: original simulator traces, participant reports, defense audit receipts, source hashes, and a manifest. Audit receipts redact recognized secrets; original simulator traces contain fictional data, including synthetic canaries. The dashboard never loads remote assets.
+- [Technical report](docs/technical-report.md)
+- [Beginner explanation](docs/beginner-guide.md)
+- [September 22 audit](docs/september-22-review.md)
+- [Demonstration inventory](docs/demo-evidence.md)
+- [Recording storyboard](docs/video-storyboard.md)
+- [Runtime setup and previous update](docs/september-21-update.md)
 
-```powershell
-cd starter-kit
-..\.venv\Scripts\python.exe -m sentinel.cli run --scenario scenarios/public/enterprise/enterprise_poisoned_invoice.yaml --defense-url http://127.0.0.1:8080 --artifacts ../artifacts/http-validation
-```
+The pinned starter kit is `dd2e5fe0979d0781a4bfe6d0849cd80cf69ef4a2`, with unmodified upstream source. Its separately tested suite has 203 passes and three Windows-specific failures. Historical development counts are retained in the detailed guide and update notes, not presented as current results.
 
-This exercises the actual HTTP integration. In the dashboard, select the corresponding experiment or enable live decisions. Live receipts show decisions; full simulator traces additionally show execution and task outcomes.
-
-## Design
-
-1. Validate the tool and arguments against the current task policy and public tool schemas.
-2. Extract sensitive identifiers, credential fields, and verbatim prose windows from observed sources; retain them across truncated context.
-3. Check plain, reversed, spaced, Unicode-normalized, hex, base64, URL, and bounded nested encoded representations at action boundaries.
-4. Prevent untrusted text from establishing memory policy or action authority. Reading untrusted evidence remains possible.
-5. Enforce object-specific prepare/confirm/execute prerequisites and exact action-digest approval.
-6. Redact only supported free-text fields; recheck replacements against every remaining constraint. Changed outbound messages become drafts.
-
-No defense decision reads scenario IDs, filenames, reference plans, expected outcomes, evaluator labels, or fixture values. `run_id` is only an opaque session namespace. Tool names and schemas describe the public API; they are not scenario-specific rules. The evaluation harness is separate from the defense.
-
-## Evidence and limitations
-
-Start with [the beginner’s guide](docs/beginner-guide.md) if you are new to cybersecurity. See [the technical report](docs/technical-report.md), [responsible AI statement](docs/responsible-ai.md), [video storyboard](docs/video-storyboard.md), and [Qwen validation guide](docs/qwen-validation.md).
-
-The expanded synthetic stress suite has 304 probes per variant. AEGIS prevents all 304 tested attack objectives and preserves the safe sentence in 192/192 draft probes. Earlier controls prevent 256/304; the 48 additional prevented objectives are shuffled four-character fragments across fields. Disabling persistence prevents 112/304 objectives; disabling data-flow checks prevents 16/304; disabling stream checks prevents 208/304. Earlier partial fragments can still escape. These are author-designed contract tests, not an independent benchmark.
-
-All 96 AEGIS tests pass, with no expected failures. Confidential prose now gates external email on exact-action review (including harmless content), and isolated two-character credential fragments are tracked across outputs. This is not general semantic leak detection; short or unobserved prose, arbitrary one-character encodings and partial disclosure remain limitations. Completion qualification recognizes selected phrasings and receipt types; it does not verify all claims or complete missing work. Risk and confidence are engineering signals, not calibrated probabilities. Human approval cannot waive data-flow policy.
-
-## Repository map
-
-| Path | Purpose |
-|---|---|
-| `aegis/defense.py` | Action policy, session evidence, object lifecycle, repair checks |
-| `aegis/flow.py` | Sensitive-value extraction, encoding normalization, redaction |
-| `aegis/audit.py` | Redacted decision receipts and hash-chain verification |
-| `aegis/app.py`, `aegis/web/` | HTTP defense and offline observability dashboard |
-| `aegis/experiments.py`, `aegis/stress.py` | Reproducible evaluations and component ablations |
-| `tests/` | Security invariants, integration, determinism, documented failures |
-| `starter-kit/` | Unmodified organizer repository, pinned git submodule |
-| `docs/` | Report, safety statement, recording plan and remaining validation |
-
-Organizer source: https://github.com/Skan22/Sentinel_Starter_Kit, commit `9aa43f731749cf1a039c5b62d49507696d54bf6c`. Its Apache-2.0 notice is retained in the submodule. Earlier evidence retains its original `14c30fb` revision. No external dataset or learned defense model was used.
-
-
-Current-build evidence: fresh static/adaptive mock runs preserve 19/19 tasks across seeds 0, 11 and 29. Static validates 10 attacks; adaptive validates nine and excludes one. The current demo plan uses ten mock cases because earlier Qwen runs belong to the previous defense build. See `docs/demo-evidence.md` and section 18 of `docs/beginner-guide.md`.
+The organizer announcement sets the deadline to 23 September 2026, 23:59; its timezone was unspecified. Final video recording, team identification, repository publication and submission remain. No winning score or production readiness is claimed.

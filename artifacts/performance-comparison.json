@@ -1,0 +1,15 @@
+{
+  "differential_text_cases": 1440,
+  "identical_complete_decision_payloads": 845,
+  "pairs": [
+    [
+      "20260922T185242761643Z",
+      "20260922T190222055363Z"
+    ],
+    [
+      "20260922T185313998546Z",
+      "20260922T190233948131Z"
+    ]
+  ],
+  "scope": "Generated text cases and recorded full-suite decisions; not a proof over all inputs"
+}

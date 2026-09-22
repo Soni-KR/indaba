@@ -10,7 +10,7 @@ async function get(url){const r=await fetch(url);if(!r.ok)throw new Error(`Reque
 function normalize(e){if(e.type)return e;return{type:'defense_decision',step_id:e.step_id,run_id:e.run_id,payload:{action:e.action,...e.decision},audit:e}}
 function metric(label,value,note){const n=el('div',undefined,'metric');n.append(el('div',label,'label'),el('strong',value),el('small',note));return n}
 function renderRuns(){const q=$('search').value.toLowerCase(),v=$('variant').value;$('runs').replaceChildren();runs.filter(r=>(r.batch===$('experiment').value||(r.group==='live'&&$('live').checked))&&(v==='all'||r.group.startsWith(v+'-'))&&(r.name+' '+r.group).toLowerCase().includes(q)).slice(0,200).forEach(r=>{const b=el('button',title(r.name),'run'+(selected===r.id?' active':''));b.append(el('small',r.group+' · '+r.kind));b.onclick=()=>select(r.id);$('runs').append(b)})}
-async function select(id){selected=id;renderRuns();events=(await get('/api/runs/'+id)).map(normalize);const r=runs.find(r=>r.id===id);$('trace-title').textContent=title(r?.name||'Live trace');$('trace-subtitle').textContent=`${events.length} recorded events · ${r?.group||''} · ${r?.kind==='audit'?'Live defense receipts; outcomes appear in simulator traces':'Simulator actions and outcomes'}${traceValidity(r)}`;renderEvents();const first=events.findIndex(e=>e.type==='defense_decision'&&visible(e));inspect(first>=0?first:events.findIndex(visible));}
+async function select(id){selected=id;renderRuns();events=(await get('/api/runs/'+id)).map(normalize);const r=runs.find(r=>r.id===id);$('trace-title').textContent=title(r?.name||'Live trace');$('trace-subtitle').textContent=`${events.length} recorded events · ${r?.group||''} · ${r?.kind==='audit'?'Live defense receipts; outcomes appear in simulator traces':'Simulator actions and outcomes'}${traceValidity(r)}`;renderStory();renderEvents();const first=events.findIndex(e=>e.type==='defense_decision'&&e.payload.decision!=='allow'&&visible(e));inspect(first>=0?first:events.findIndex(visible));}
 function visible(e){const f=$('filter').value;return f==='all'||(f==='interventions'?e.type==='defense_decision'&&e.payload.decision!=='allow':e.type===f)}
 function renderEvents(){$('timeline').replaceChildren();events.forEach((e,i)=>{if(!visible(e))return;const p=e.payload||{},d=p.decision;const b=el('button',undefined,'event'+(eventIndex===i?' selected':''));b.dataset.index=i;const c=el('div');const h=el('div',title(e.type),'event-title');if(d)h.append(el('span',d.toUpperCase(),'pill '+d));c.append(h,el('div',p.action?.tool||p.tool||p.reason_codes?.join(' · ')||e.actor||e.run_id,'event-sub'));b.append(el('span',String(e.step_id).padStart(2,'0'),'step'),c);b.onclick=()=>inspect(i);$('timeline').append(b)})}
 function section(node,label,value){node.append(el('h4',label),el('pre',typeof value==='string'?value:pretty(value)))}
@@ -19,3 +19,24 @@ async function refresh(){try{const [rs,reports]=await Promise.all([get('/api/run
 $('experiment').onchange=()=>{selected=null;refresh()};$('live').onchange=()=>{if($('live').checked){$('variant').value='all';const r=runs.find(r=>r.group==='live');if(r)select(r.id)}renderRuns()};$('search').oninput=renderRuns;$('variant').onchange=renderRuns;$('filter').onchange=()=>{renderEvents();if(!events[eventIndex]||!visible(events[eventIndex])){const first=events.findIndex(visible);if(first>=0)inspect(first);else $('inspector').replaceChildren(el('p','No events match this filter.'))}};$('refresh').onclick=refresh;
 $('play').onclick=()=>{if(timer){clearInterval(timer);timer=null;$('play').textContent='▶ Replay';return}eventIndex=-1;$('play').textContent='Ⅱ Pause';timer=setInterval(()=>{let next=eventIndex+1;while(next<events.length&&!visible(events[next]))next++;if(next>=events.length){clearInterval(timer);timer=null;$('play').textContent='▶ Replay';return}inspect(next);document.querySelector('.event.selected')?.scrollIntoView({block:'nearest',behavior:'smooth'})},900)};
 setInterval(()=>{if($('live').checked)refresh()},2000);refresh();
+
+function renderStory(){
+ const node=$('trace-story');node.replaceChildren();
+ const intervention=events.find(e=>e.type==='defense_decision'&&e.payload.decision!=='allow');
+ const p=intervention?.payload||{};
+ const sources=intervention?.audit?.sources||[];
+ const sourceLabel=s=>{const obs=intervention?.audit?.observations?.find(o=>o.provenance_ids?.includes(s.id));try{const item=JSON.parse(obs?.content||'{}');return (item.title||item.id||item.results?.[0]?.title||s.id)+' · '+s.trust}catch{return s.id+' · '+s.trust}};
+ const hostile=sources.filter(s=>['untrusted_external','untrusted_internal','adversary_controlled'].includes(s.trust));
+ const sensitive=sources.filter(s=>['restricted','confidential'].includes(s.sensitivity));
+ const candidate=intervention?.audit?.action||p.action;
+ const outcome=events.findLast(e=>e.type==='task_success'||e.type==='task_failure');
+ const entries=[
+ ['1 · Attack source',hostile.length?hostile.map(sourceLabel).join(', '):'No untrusted source linked in this decision; inspect retrieved evidence.'],
+ ['2 · Sensitive item',sensitive.length?sensitive.map(s=>sourceLabel(s)+' · '+s.sensitivity).join(', '):'No classified item linked in this decision.'],
+ ['3 · Attempted action',candidate?(candidate.tool||candidate.type)+(candidate.arguments?.to?' → '+candidate.arguments.to:''):'No intervention recorded.'],
+ ['4 · AEGIS reason',p.explanation||'No intervention recorded; this alone does not establish protection.'],
+ ['5 · Enforcement',p.decision?p.decision.toUpperCase()+(p.rewritten_action?' · replacement recorded':''):'No intervention'],
+ ['6 · Task outcome',outcome?outcome.payload.summary+' · '+outcome.payload.termination:'No graded outcome recorded in this trace.']
+ ];
+ entries.forEach(([label,text])=>{const card=el('div',undefined,'story-card');card.append(el('strong',label),el('p',text));node.append(card)});
+}

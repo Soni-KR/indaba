@@ -14,3 +14,6 @@ if ($LASTEXITCODE -ne 0) { throw 'Stress experiment failed.' }
 if ($LASTEXITCODE -ne 0) { throw 'Validated demo selection failed.' }
 & $aegisPython scripts/build_report.py
 if ($LASTEXITCODE -ne 0) { throw 'Report generation failed.' }
+
+& $aegisPython scripts/break_aegis.py
+if ($LASTEXITCODE -ne 0) { throw "Diagnostic suite could not execute." }
