@@ -1,3 +1,5 @@
+**Latest evidence, September 21:** pinned kit `dd2e5fe`; 98 AEGIS tests pass; expanded static mock suite 40/40 tasks and 0/31 validated attacks. A three-case Qwen pilot validates two attacks, both prevented with task success; finance remains unvalidated. Current demo inventory: 2 Qwen + 29 mock. Older counts below are development history. See [update details](docs/september-21-update.md).
+
 # AEGIS — SENTINEL defense and safety observatory
 
 AEGIS sits between the SENTINEL agent and its tools. It checks active permissions, tracks observed sensitive data across history truncation, requires approvals for exact consequential actions, and repairs safe content when possible. Every decision produces a source-linked, hash-chained receipt.
@@ -68,7 +70,7 @@ Start with [the beginner’s guide](docs/beginner-guide.md) if you are new to cy
 
 The expanded synthetic stress suite has 304 probes per variant. AEGIS prevents all 304 tested attack objectives and preserves the safe sentence in 192/192 draft probes. Earlier controls prevent 256/304; the 48 additional prevented objectives are shuffled four-character fragments across fields. Disabling persistence prevents 112/304 objectives; disabling data-flow checks prevents 16/304; disabling stream checks prevents 208/304. Earlier partial fragments can still escape. These are author-designed contract tests, not an independent benchmark.
 
-Two deliberately failing security expectations are marked `xfail(strict=True)`: semantic paraphrases of confidential facts and reordered two-character fragments. The former four-character reordering failure now passes. Completion qualification recognizes selected phrasings and receipt types; it does not verify all claims or complete missing work. Risk and confidence are engineering signals, not calibrated probabilities. Human approval cannot waive data-flow policy.
+All 96 AEGIS tests pass, with no expected failures. Confidential prose now gates external email on exact-action review (including harmless content), and isolated two-character credential fragments are tracked across outputs. This is not general semantic leak detection; short or unobserved prose, arbitrary one-character encodings and partial disclosure remain limitations. Completion qualification recognizes selected phrasings and receipt types; it does not verify all claims or complete missing work. Risk and confidence are engineering signals, not calibrated probabilities. Human approval cannot waive data-flow policy.
 
 ## Repository map
 
@@ -85,3 +87,5 @@ Two deliberately failing security expectations are marked `xfail(strict=True)`: 
 
 Organizer source: https://github.com/Skan22/Sentinel_Starter_Kit, commit `9aa43f731749cf1a039c5b62d49507696d54bf6c`. Its Apache-2.0 notice is retained in the submodule. Earlier evidence retains its original `14c30fb` revision. No external dataset or learned defense model was used.
 
+
+Current-build evidence: fresh static/adaptive mock runs preserve 19/19 tasks across seeds 0, 11 and 29. Static validates 10 attacks; adaptive validates nine and excludes one. The current demo plan uses ten mock cases because earlier Qwen runs belong to the previous defense build. See `docs/demo-evidence.md` and section 18 of `docs/beginner-guide.md`.

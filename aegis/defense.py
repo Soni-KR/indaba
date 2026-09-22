@@ -63,6 +63,8 @@ class AegisDefense(Defense):
         unordered=True,
         argument_repair=True,
         completion=True,
+        context_review=True,
+        tiny_fragments=True,
         max_sessions=128,
     ):
         self.flow = flow
@@ -73,6 +75,8 @@ class AegisDefense(Defense):
         self.unordered = unordered
         self.argument_repair = argument_repair
         self.completion = completion
+        self.context_review = context_review
+        self.tiny_fragments = tiny_fragments
         self.max_sessions = max_sessions
         self.sessions: OrderedDict[str, Session] = OrderedDict()
         self.lock = threading.RLock()
@@ -153,7 +157,8 @@ class AegisDefense(Defense):
                 key = (request.step_id, effective.digest())
                 if key not in state.releases:
                     for sink, value in egress_fields(effective).items():
-                        state.egress[sink] = (state.egress.get(sink, "") + value)[-16_000:]
+                        prior = state.egress.get(sink, "")
+                        state.egress[sink] = (prior + ("\n" if prior else "") + value)[-16_000:]
                     state.releases.add(key)
             return result
 
@@ -228,7 +233,9 @@ class AegisDefense(Defense):
                             ],
                         )
                 if self.unordered:
-                    scattered = unordered_disclosures(state.egress, streams, secrets)
+                    scattered = unordered_disclosures(
+                        state.egress, streams, secrets, tiny_fragments=self.tiny_fragments
+                    )
                     if scattered:
                         secret, encoding, destination, covered, total = scattered
                         return self._decision(
@@ -272,6 +279,24 @@ class AegisDefense(Defense):
                     "SENSITIVE_FLOW_BLOCKED",
                     "Sensitive data cannot cross this action boundary.",
                     evidence=evidence,
+                )
+
+            # Text matching cannot establish that a paraphrase is safe to disclose.
+            # Require independent, exact-action review after observing confidential prose.
+            prose_sources = [
+                s for s in state.secrets.values() if s.sensitivity in {"confidential", "restricted"} and " " in s.value
+            ]
+            if (
+                self.context_review
+                and external
+                and prose_sources
+                and action.digest() not in request.history_digest.confirmations_granted
+            ):
+                return self._decision(
+                    "escalate",
+                    "CONFIDENTIAL_CONTEXT_REVIEW",
+                    "External content after confidential prose requires exact-action human review, including possible paraphrases.",
+                    evidence=[{"source": s.source, "scope": "conservative_context_gate"} for s in prose_sources],
                 )
 
         if self.authority:

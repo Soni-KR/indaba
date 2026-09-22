@@ -22,7 +22,15 @@ from aegis.evidence import attack_gate
 ROOT = Path(__file__).resolve().parents[1]
 VARIANTS = {
     "aegis": {},
-    "aegis_v1": {"unordered": False, "argument_repair": False, "completion": False},
+    "aegis_v1": {
+        "unordered": False,
+        "argument_repair": False,
+        "completion": False,
+        "context_review": False,
+        "tiny_fragments": False,
+    },
+    "no_context_review": {"context_review": False},
+    "no_tiny_fragments": {"tiny_fragments": False},
     "no_argument_repair": {"argument_repair": False},
     "no_unordered": {"unordered": False},
     "no_completion": {"completion": False},

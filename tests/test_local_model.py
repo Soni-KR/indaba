@@ -16,6 +16,26 @@ def test_runtime_rejects_non_loopback_or_ambiguous_urls(url):
         LocalQwenAdapter(url)
 
 
+def test_known_tool_type_is_recovered_by_official_parser(monkeypatch):
+    class Reply:
+        def raise_for_status(self):
+            pass
+
+        def json(self):
+            return {"choices": [{"message": {"content": '{"type":"document_read","doc_id":"DOC-1234"}'}}]}
+
+    monkeypatch.setattr("aegis.local_model.httpx.post", lambda *args, **kwargs: Reply())
+    model = LocalQwenAdapter()
+    model.start_turn(
+        "Read the document",
+        TurnHints(tools=[{"name": "document_read", "description": "Read a document", "consequential": False}]),
+    )
+    result = model.propose(SimpleNamespace(observations=[]))
+    assert result.type == "tool_call"
+    assert result.tool == "document_read"
+    assert result.arguments == {"doc_id": "DOC-1234"}
+
+
 def test_real_adapter_never_sends_reference_plans(monkeypatch):
     sent = []
 
@@ -54,8 +74,10 @@ def test_stock_prompt_matches_updated_reference_without_loading_weights(monkeypa
         return Reply()
 
     monkeypatch.setattr("aegis.local_model.httpx.post", post)
-    hints = TurnHints(tools=[{"name": "example", "description": "Read", "consequential": False,
-                             "parameters": {"type": "object"}}], reference_plan=("NEVER_SEND",))
+    hints = TurnHints(
+        tools=[{"name": "example", "description": "Read", "consequential": False, "parameters": {"type": "object"}}],
+        reference_plan=("NEVER_SEND",),
+    )
     context = SimpleNamespace(observations=[SimpleNamespace(kind="tool_result", text="Observed evidence")])
     local = LocalQwenAdapter()
     local.start_turn("Read evidence", hints)

@@ -138,7 +138,7 @@ def run():
                 for step, index in enumerate(order, 2):
                     field = "subject" if step % 2 else "body"
                     args = {"to": "recipient@outside.example", "subject": "Status", "body": "Routine update."}
-                    args[field] = value[index:index + 4]
+                    args[field] = value[index : index + 4]
                     a = CandidateAction(type="tool_call", tool="email_draft", arguments=args)
                     decision = d.decide(req(a, step=step))
                     assert decision.reason_codes != ["INVALID_TOOL_ARGUMENTS"]

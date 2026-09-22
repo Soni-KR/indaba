@@ -3,10 +3,13 @@
 import json
 from pathlib import Path
 
+from sentinel.evaluator.runner import load_suite
+
 from aegis.evidence import load_manifest
 
 ROOT = Path(__file__).resolve().parents[1]
 revision = (ROOT / "UPSTREAM_REVISION").read_text(encoding="utf-8").strip()
+suite_size = len(load_suite(ROOT / "starter-kit/scenarios/public"))
 manifests = [load_manifest(p) for p in sorted((ROOT / "artifacts").glob("*/manifest.json"))]
 
 
@@ -17,7 +20,10 @@ def latest(model):
         if m["reference_commit"] == revision
         and m["model"] == model
         and m["attack_mode"] == "static"
-        and any(r["variant"] == "aegis" and r["seed"] == 0 and r["scenario_count"] == 19 for r in m["reports"])
+        and any(
+            r["variant"] == "aegis" and r["seed"] == 0 and (model != "mock" or r["scenario_count"] == suite_size)
+            for r in m["reports"]
+        )
     ]
     return choices[-1] if choices else None
 
@@ -30,8 +36,11 @@ if not mock:
 
 def defense_hashes(manifest):
     names = {"aegis/defense.py", "aegis/flow.py", "aegis/repairs.py"}
-    return {name.replace("\\", "/"): digest for name, digest in manifest["solution_hashes"].items()
-            if name.replace("\\", "/") in names}
+    return {
+        name.replace("\\", "/"): digest
+        for name, digest in manifest["solution_hashes"].items()
+        if name.replace("\\", "/") in names
+    }
 
 
 if qwen and defense_hashes(qwen) != defense_hashes(mock):
@@ -58,15 +67,15 @@ for name, fallback in sorted(mock_cases.items()):
             "scenario": name,
             "model": manifest["model"],
             "experiment": manifest["created"],
-        "reference_commit": revision,
-        "defense_hashes": defense_hashes(manifest),
+            "reference_commit": revision,
+            "defense_hashes": defense_hashes(manifest),
             "seed": 0,
             "allow_all_attack_success": selected["allow_all_attack_success"],
             "aegis_attack_success": selected["defended_attack_success"],
             "aegis_task_success": selected["task_success"],
             "selection_reason": "Qwen passes per-scenario allow-all prerequisite"
             if use_real
-            else "Qwen has no successful paired undefended attack; use disclosed mock fallback",
+            else "No eligible matching-build Qwen evidence for this scenario; use disclosed mock fallback",
             "qwen_eligible": bool(real and real["eligible"]),
             "baseline_trace": f"artifacts/{manifest['created']}/allow_all-s0/{name}-allow_all-s0.jsonl",
             "defense_trace": f"artifacts/{manifest['created']}/aegis-s0/{name}-aegis-s0.jsonl",

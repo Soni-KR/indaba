@@ -40,6 +40,9 @@ class AuditedDefense(Defense):
     def __init__(self, inner, path):
         self.inner, self.path, self.name = inner, Path(path), inner.name
         self.path.parent.mkdir(parents=True, exist_ok=True)
+        # A model may fail before proposing any action. Preserve an explicit empty
+        # audit so that the experiment can report that failure instead of crashing.
+        self.path.touch(exist_ok=True)
         self.previous = verify(self.path)["head"] if self.path.exists() else "0" * 64
         self.lock = threading.Lock()
 

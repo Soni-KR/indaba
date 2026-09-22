@@ -79,7 +79,7 @@ class LocalQwenAdapter(ModelAdapter):
                         )
                         + "\n"
                     )
-            return parse_action(content)
+            return parse_action(content, {str(t["name"]) for t in self.tools})
         except (httpx.HTTPError, KeyError, IndexError, TypeError) as exc:
             raise ModelError(f"Local Qwen inference failed: {type(exc).__name__}") from exc
 

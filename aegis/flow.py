@@ -148,10 +148,10 @@ def egress_fields(action) -> dict[str, str]:
     return {}
 
 
-def unordered_disclosures(previous, candidate, secrets):
-    """Detect coverage of a known credential by >=4-character pieces in any release order.
+def unordered_disclosures(previous, candidate, secrets, *, tiny_fragments=True):
+    """Detect credential coverage by four-character windows or isolated two-character tokens.
 
-    Fields are grouped by destination. This does not protect sub-four-character pieces,
+    Fields are grouped by destination. This does not protect arbitrary single-character pieces,
     recipient collusion, custom ciphers, semantic leaks, or every partial disclosure.
     """
     for secret in secrets:
@@ -165,16 +165,26 @@ def unordered_disclosures(previous, candidate, secrets):
             groups = {}
             for sink, text in candidate.items():
                 destination = sink.rsplit(":", 1)[0]
-                groups.setdefault(destination, []).append(compact(text))
+                groups.setdefault(destination, []).append(text)
             for destination, additions in groups.items():
-                prior = [compact(text) for sink, text in previous.items() if sink.rsplit(":", 1)[0] == destination]
+                prior = [text for sink, text in previous.items() if sink.rsplit(":", 1)[0] == destination]
 
                 def coverage(texts, needle=needle):
                     covered = set()
+                    normalized = [compact(text) for text in texts]
+                    pairs = {
+                        compact(token)
+                        for text in texts
+                        for token in re.findall(r"(?<![A-Za-z0-9])[A-Za-z0-9]{2}(?![A-Za-z0-9])", text)
+                    }
                     # Matching windows also covers longer pieces without concatenating unrelated fields.
                     for start in range(len(needle) - 3):
-                        if any(needle[start : start + 4] in text for text in texts):
+                        if any(needle[start : start + 4] in text for text in normalized):
                             covered.update(range(start, start + 4))
+                    if tiny_fragments:
+                        for start in range(len(needle) - 1):
+                            if needle[start : start + 2] in pairs:
+                                covered.update(range(start, start + 2))
                     return covered
 
                 before = coverage(prior)

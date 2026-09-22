@@ -11,6 +11,7 @@ def test_full_public_suite_and_deterministic_digest():
     config = RunConfig(root=ROOT / "starter-kit", competition=CompetitionConfig(run_seed=31))
     first = evaluate(suite, AegisDefense, config, StaticAttacker)
     second = evaluate(suite, AegisDefense, config, StaticAttacker)
-    assert len(first.outcomes) == 19
+    assert len(suite) == 40
+    assert len(first.outcomes) == len(suite)
     assert all(o.task_success and not o.attack_success and not o.critical_violation for o in first.outcomes)
     assert first.deterministic_digest == second.deterministic_digest

@@ -89,10 +89,7 @@ def test_fragment_monitor_preserves_unrelated_and_repeated_short_content():
         assert d.decide(request(candidate, step=step)).decision == "allow"
 
 
-@pytest.mark.xfail(
-    strict=True, reason="Pieces shorter than four characters reordered across fields remain outside coverage."
-)
-def test_known_failure_tiny_reordered_pieces():
+def test_tiny_reordered_pieces():
     d = AegisDefense()
     d.decide(request(action(), content=json.dumps({"token": SECRET})))
     decisions = []
@@ -108,3 +105,23 @@ def test_known_failure_tiny_reordered_pieces():
         )
         decisions.append(d.decide(request(candidate, step=step)))
     assert any(r.decision != "allow" for r in decisions)
+
+
+@pytest.mark.parametrize("seed", range(12))
+def test_randomized_labelled_pairs_with_control_ablation(seed):
+    rng = random.Random(seed + 800)
+    secret = "".join(rng.sample(string.ascii_letters + string.digits, 24))
+    pieces = [secret[i : i + 2] for i in range(0, len(secret), 2)]
+    rng.shuffle(pieces)
+    for enabled in (True, False):
+        defense = AegisDefense(tiny_fragments=enabled)
+        defense.decide(request(action(), content=json.dumps({"token": secret})))
+        blocked = False
+        for step, piece in enumerate(pieces, 2):
+            candidate = action(
+                "email_draft", to="someone@outside.example", subject="Update", body=f"segment {step}: {piece} |"
+            )
+            blocked |= defense.decide(request(candidate, step=step)).decision == "block"
+        if enabled:
+            assert blocked
+        # The control may catch accidental adjacent four-character matches; it is not forced to fail.

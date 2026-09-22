@@ -9,6 +9,14 @@ from aegis.defense import AegisDefense
 from tests.test_defense import SECRET, action, request
 
 
+def test_no_model_actions_preserves_empty_audit(tmp_path):
+    path = tmp_path / "empty.audit.jsonl"
+    AuditedDefense(AegisDefense(), path)
+    result = verify(path)
+    assert result["entries"] == 0
+    assert result["valid"] is True
+
+
 def test_contract_and_ui():
     client = TestClient(app)
     assert client.get("/healthz").json()["status"] == "ok"
@@ -52,5 +60,5 @@ def test_trace_remains_readable_during_audit_append(tmp_path, monkeypatch):
     assert response.status_code == 200
     assert response.json()[0]["audit"] == receipt
     # Interior corruption is surfaced, rather than silently hiding a decision.
-    audit.write_text(prefix + '{broken}\n' + json.dumps(receipt) + "\n")
+    audit.write_text(prefix + "{broken}\n" + json.dumps(receipt) + "\n")
     assert client.get(f"/api/runs/{trace_id}").status_code == 409
