@@ -1,3 +1,5 @@
+> Historical development note. For final September 23 metrics, public-access/CI status and submission readiness, see [the final technical report](technical-report.md). Results and timings below retain their original scope.
+
 # False-block-labelled actions
 
 Static seed 0: 16/162 = 9.876543%. Source: `artifacts/20260922T190222055363Z/aegis-s0.json`. The metric and its denominator are unchanged by the optimization.

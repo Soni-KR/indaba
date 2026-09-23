@@ -1,3 +1,5 @@
+> Historical development note. For final September 23 metrics, public-access/CI status and submission readiness, see [the final technical report](technical-report.md). Results and timings below retain their original scope.
+
 **Latest encoding follow-up:** Base32, ROT13 and the tested Unicode lookalikes now trigger intervention. Current tests: 162 passing; benign checks: 40/40. Two fragment channels remain exposed. See [before/after comparison](encoding-comparison.md). Earlier counts below are historical. No current-build Qwen result is claimed.
 
 # September 22 final evidence review

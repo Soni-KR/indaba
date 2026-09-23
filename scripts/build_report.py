@@ -319,5 +319,9 @@ For every recorded attack, the paired undefended run must report attack_success=
 
 The deliverable includes the defense, local service, dashboard, reproducible code, manifests, traces, ablations, failure tests, report and beginner guide. The final 5–10 minute video, team identification, repository publication and organizer submission remain to be completed. The recording storyboard is in `docs/video-storyboard.md`. The report describes measured evidence; it does not promise a winning place.
 """
+# Final submission sections are derived from the same saved evidence.
+from submission_sections import finalize
+
+text = finalize(text, static, adaptive, ROOT)
 (ROOT / "docs/technical-report.md").write_text(text, encoding="utf-8")
 print("Wrote docs/technical-report.md from completed evidence.")

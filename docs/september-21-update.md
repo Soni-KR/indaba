@@ -1,3 +1,5 @@
+> Historical development note. For final September 23 metrics, public-access/CI status and submission readiness, see [the final technical report](technical-report.md). Results and timings below retain their original scope.
+
 # September 21 update: expanded kit and fresh evidence
 
 The organizer announcement extends the deadline to **23 September 2026 at 23:59**. The announcement does not state a timezone; the pinned guide still has the older date. This extension is attributed to the newer announcement supplied by the participant.

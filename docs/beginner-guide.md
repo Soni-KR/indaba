@@ -1,3 +1,5 @@
+> Final September 23 evidence: static mock 40/40 tasks, 0/31 validated attacks across three seeds; AEGIS p95 18.940/16.161/16.131 ms. See [final report](technical-report.md). The dated development notes below preserve earlier results and are historical.
+
 **Performance follow-up finalized September 23:** the security-hardened build is now optimized: 18–44 ms measured p95, 162 tests passing, unchanged tested decisions and outcomes. See [performance review](performance-review.md) and [false-block analysis](false-block-analysis.md). Earlier timings below are historical.
 
 **Latest encoding follow-up:** Base32, ROT13 and the tested Unicode lookalikes now trigger intervention. Current tests: 162 passing; benign checks: 40/40. Two fragment channels remain exposed. See [before/after comparison](encoding-comparison.md). Earlier counts below are historical. No current-build Qwen result is claimed.

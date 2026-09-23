@@ -1,26 +1,21 @@
-# Submission checklist - 23 September 2026
+# Final submission checklist - 23 September 2026
 
-Deadline from the organizer: 23/09 at 23:59 (announcement does not specify timezone).
+Completed:
 
-## Prepared locally
+- [x] Team: **Mourad has lost a finger**.
+- [x] Members: **Mourad Kraiem**, **Mohamed Yassin ghaoui**, **Amine Fathallah**.
+- [x] Public repository: https://github.com/Soni-KR/indaba (anonymous API confirms public).
+- [x] Hosted main CI succeeded: [run 35904607069](https://github.com/Soni-KR/indaba/actions/runs/35904607069), commit d2ce0a6. No Docker build claim.
+- [x] [Technical report](technical-report.md) and [submission PDF](AEGIS-submission-report.pdf), including architecture, all template sections, current metrics, domains and digests.
+- [x] Latest static evidence: `artifacts/20260923T191236142234Z`; adaptive: `artifacts/20260923T191249640018Z`.
+- [x] Current two-scenario MOCK [video script](video-storyboard.md): `artifacts/20260923T191303750037Z`.
+- [x] Known exposed channels, false positives and historical-only Qwen evidence are disclosed.
 
-- Team: **Mourad has lost a finger**.
-- Members: **Mourad Kraiem**, **Mohamed Yassin ghaoui**, **Amine Fathallah**.
-- Uploadable report: [AEGIS-submission-report.pdf](AEGIS-submission-report.pdf).
-- Detailed methods/evidence: [technical-report.md](technical-report.md).
-- Current recording script: [video-storyboard.md](video-storyboard.md).
-- Latest results: 162 passing AEGIS tests; static mock 40/40 tasks and 0/31 validated successful attacks, seeds 0/11/29; adaptive mock 40/40 tasks and 0/30 validated successful attacks (one excluded).
-- Known exposed channels, false blocks, historical Qwen scope and separate upstream Windows failures are disclosed.
-- The local ZIP at `output/AEGIS-development-package.zip` bundles the source, PDF, documentation and selected evidence with SHA-256 checksums. It is a fallback deliverable, not proof of GitHub publication.
+Remaining before 23/09 at 23:59 (organizer announcement does not specify timezone):
 
-## Required user actions before submission
+- [ ] Record/upload the video using the script. The assistant does not create or upload it.
+- [ ] Set Drive access to **Anyone with the link - Viewer**.
+- [ ] Open the Drive link signed out/private and confirm it plays.
+- [ ] Manually submit the report and links in the [submission form](https://docs.google.com/forms/d/e/1FAIpQLSeex30bzFfBAU_iqRwRKIWr2f5pvJvZT9zTUfqdQVfbbwStmw/viewform); retain confirmation. The assistant has not filled or submitted it.
 
-1. Record the 6-8 minute demonstration using the script. No video link has been provided or verified.
-2. Upload the video to Drive, enable viewer access, and verify the link in a private/signed-out window.
-3. Verify repository access at https://github.com/Soni-KR/indaba. Anonymous checks returned HTTP 404 on September 23; this can mean private or unavailable. Make it accessible to judges or correct the URL. Ensure the latest submission PDF and docs are present on GitHub.
-4. Supply your preferred contact email in the form; no contact email was supplied to this task.
-5. Open the form yourself, enter the team details and public links, attach the report as requested, submit, and retain the confirmation. **The assistant has not filled or submitted the form.**
-
-Form: https://docs.google.com/forms/d/e/1FAIpQLSeex30bzFfBAU_iqRwRKIWr2f5pvJvZT9zTUfqdQVfbbwStmw/viewform
-
-The organizers allow resubmission before the deadline; the latest submission is judged. A local file or Git commit alone is not a submission.
+The latest submission before the deadline is judged. Local commits are not a form submission. The local ZIP at `output/AEGIS-development-package.zip` is a reproducible fallback package.

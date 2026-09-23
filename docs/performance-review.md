@@ -1,3 +1,5 @@
+> Historical development note. For final September 23 metrics, public-access/CI status and submission readiness, see [the final technical report](technical-report.md). Results and timings below retain their original scope.
+
 # Hardened versus optimized AEGIS
 
 Finalized September 23 from September 22 measurements. Performance-only changes; the security boundary is unchanged.

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="720" height="420" preserveAspectRatio="xMinYMin meet" viewBox="0 0 720 420" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="720" height="420"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-420)" style="clip-path: url(#clip)">
+		<g transform="">
+			<text x="15" y="395" style="font-family: Helvetica; font-size: 19px;fill: rgb(9%,24%,22%); stroke:none;" transform="translate(0,790) scale(1,-1)">AEGIS: enforcement between proposed action and effect</text>
+			<rect x="10" y="250" width="190" height="110" rx="8" ry="8" style="stroke: rgb(9%,24%,22%); stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<text x="22" y="337" style="font-family: Helvetica; font-size: 14px;fill: rgb(9%,24%,22%); stroke:none;" transform="translate(0,674) scale(1,-1)">Reference agent</text>
+			<text x="22" y="314" style="font-family: Helvetica; font-size: 11px;fill: rgb(9%,24%,22%); stroke:none;" transform="translate(0,628) scale(1,-1)">Official mock / Qwen3-8B</text>
+			<text x="22" y="296" style="font-family: Helvetica; font-size: 11px;fill: rgb(9%,24%,22%); stroke:none;" transform="translate(0,592) scale(1,-1)">Unchanged prompt and tools</text>
+			<text x="22" y="278" style="font-family: Helvetica; font-size: 11px;fill: rgb(9%,24%,22%); stroke:none;" transform="translate(0,556) scale(1,-1)">Goal, retrieval, memory, history</text>
+			<rect x="230" y="170" width="270" height="190" rx="8" ry="8" style="stroke: rgb(9%,24%,22%); stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<text x="242" y="337" style="font-family: Helvetica; font-size: 14px;fill: rgb(9%,24%,22%); stroke:none;" transform="translate(0,674) scale(1,-1)">AEGIS action boundary</text>
+			<text x="242" y="314" style="font-family: Helvetica; font-size: 11px;fill: rgb(9%,24%,22%); stroke:none;" transform="translate(0,628) scale(1,-1)">Permission and public schema</text>
+			<text x="242" y="296" style="font-family: Helvetica; font-size: 11px;fill: rgb(9%,24%,22%); stroke:none;" transform="translate(0,592) scale(1,-1)">Source-derived representations</text>
+			<text x="242" y="278" style="font-family: Helvetica; font-size: 11px;fill: rgb(9%,24%,22%); stroke:none;" transform="translate(0,556) scale(1,-1)">Persistent per-session evidence</text>
+			<text x="242" y="260" style="font-family: Helvetica; font-size: 11px;fill: rgb(9%,24%,22%); stroke:none;" transform="translate(0,520) scale(1,-1)">Streams within each destination</text>
+			<text x="242" y="242" style="font-family: Helvetica; font-size: 11px;fill: rgb(9%,24%,22%); stroke:none;" transform="translate(0,484) scale(1,-1)">Exact approvals and lifecycle</text>
+			<text x="242" y="224" style="font-family: Helvetica; font-size: 11px;fill: rgb(9%,24%,22%); stroke:none;" transform="translate(0,448) scale(1,-1)">Rewrite revalidation / final output</text>
+			<rect x="530" y="250" width="180" height="110" rx="8" ry="8" style="stroke: rgb(9%,24%,22%); stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<text x="542" y="337" style="font-family: Helvetica; font-size: 14px;fill: rgb(9%,24%,22%); stroke:none;" transform="translate(0,674) scale(1,-1)">Decision -&gt; simulator</text>
+			<text x="542" y="314" style="font-family: Helvetica; font-size: 11px;fill: rgb(9%,24%,22%); stroke:none;" transform="translate(0,628) scale(1,-1)">ALLOW / BLOCK</text>
+			<text x="542" y="296" style="font-family: Helvetica; font-size: 11px;fill: rgb(9%,24%,22%); stroke:none;" transform="translate(0,592) scale(1,-1)">REWRITE / ESCALATE</text>
+			<text x="542" y="278" style="font-family: Helvetica; font-size: 11px;fill: rgb(9%,24%,22%); stroke:none;" transform="translate(0,556) scale(1,-1)">Simulated tools and response</text>
+			<path d="M 200,302 L 228,302 Z" style="stroke: rgb(9%,24%,22%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="228 302, 221 306, 221 298" style="stroke: rgb(9%,24%,22%); stroke-linecap: butt; stroke-width: 1; fill: rgb(9%,24%,22%); fill-rule: evenodd;"/>
+			<path d="M 500,302 L 528,302 Z" style="stroke: rgb(9%,24%,22%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="528 302, 521 306, 521 298" style="stroke: rgb(9%,24%,22%); stroke-linecap: butt; stroke-width: 1; fill: rgb(9%,24%,22%); fill-rule: evenodd;"/>
+			<rect x="10" y="60" width="190" height="120" rx="8" ry="8" style="stroke: rgb(9%,24%,22%); stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<text x="22" y="157" style="font-family: Helvetica; font-size: 14px;fill: rgb(9%,24%,22%); stroke:none;" transform="translate(0,314) scale(1,-1)">Trusted inputs</text>
+			<text x="22" y="134" style="font-family: Helvetica; font-size: 11px;fill: rgb(9%,24%,22%); stroke:none;" transform="translate(0,268) scale(1,-1)">Policy and provenance</text>
+			<text x="22" y="116" style="font-family: Helvetica; font-size: 11px;fill: rgb(9%,24%,22%); stroke:none;" transform="translate(0,232) scale(1,-1)">Approval and result envelopes</text>
+			<text x="22" y="98" style="font-family: Helvetica; font-size: 11px;fill: rgb(9%,24%,22%); stroke:none;" transform="translate(0,196) scale(1,-1)">No scenario IDs, grading labels</text>
+			<text x="22" y="80" style="font-family: Helvetica; font-size: 11px;fill: rgb(9%,24%,22%); stroke:none;" transform="translate(0,160) scale(1,-1)">or reference plans in defense</text>
+			<path d="M 200,145 L 228,145 Z" style="stroke: rgb(9%,24%,22%); stroke-linecap: butt; stroke-width: 2;"/>
+			<polygon points="228 145, 221 149, 221 141" style="stroke: rgb(9%,24%,22%); stroke-linecap: butt; stroke-width: 1; fill: rgb(9%,24%,22%); fill-rule: evenodd;"/>
+			<rect x="230" y="40" width="480" height="100" rx="8" ry="8" style="stroke: rgb(9%,24%,22%); stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,96%,95%); fill-rule: evenodd;"/>
+			<text x="242" y="117" style="font-family: Helvetica; font-size: 14px;fill: rgb(9%,24%,22%); stroke:none;" transform="translate(0,234) scale(1,-1)">Audit and dashboard</text>
+			<text x="242" y="94" style="font-family: Helvetica; font-size: 11px;fill: rgb(9%,24%,22%); stroke:none;" transform="translate(0,188) scale(1,-1)">Source -&gt; sensitive item -&gt; candidate -&gt; reason -&gt; decision -&gt; outcome</text>
+			<text x="242" y="76" style="font-family: Helvetica; font-size: 11px;fill: rgb(9%,24%,22%); stroke:none;" transform="translate(0,152) scale(1,-1)">Redacted hash-chain receipts; separately retained chain heads</text>
+			<text x="242" y="58" style="font-family: Helvetica; font-size: 11px;fill: rgb(9%,24%,22%); stroke:none;" transform="translate(0,116) scale(1,-1)">Known gap: no protection against cross-recipient collusion</text>
+			<path d="M 365,170 L 365,140 Z" style="stroke: rgb(9%,24%,22%); stroke-linecap: butt; stroke-width: 2;"/>
+			<text x="15" y="15" style="font-family: Helvetica; font-size: 11px;fill: rgb(9%,24%,22%); stroke:none;" transform="translate(0,30) scale(1,-1)">No learned defense model. No production authentication or distributed state guarantee.</text>
+		</g>
+	</g>
+</svg>

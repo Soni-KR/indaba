@@ -1,3 +1,5 @@
+> Historical development note. For final September 23 metrics, public-access/CI status and submission readiness, see [the final technical report](technical-report.md). Results and timings below retain their original scope.
+
 **Current follow-up:** the historical counts below describe earlier stages. The latest build has 96 passing AEGIS tests and no expected failures. It adds conservative confidential-context email review and isolated two-character fragment coverage. Fresh matching-build demo evidence uses ten mock cases; Qwen evidence below predates these defense changes.
 
 # September 19 starter-kit integration

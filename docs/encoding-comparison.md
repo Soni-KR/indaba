@@ -1,3 +1,5 @@
+> Historical development note. For final September 23 metrics, public-access/CI status and submission readiness, see [the final technical report](technical-report.md). Results and timings below retain their original scope.
+
 **Performance follow-up finalized September 23:** the security-hardened build is now optimized: 18–44 ms measured p95, 162 tests passing, unchanged tested decisions and outcomes. See [performance review](performance-review.md) and [false-block analysis](false-block-analysis.md). Earlier timings below are historical.
 
 # Encoding hardening: before and after

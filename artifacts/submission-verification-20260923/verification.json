@@ -1,0 +1,32 @@
+{
+  "date": "2026-09-23",
+  "ruff": "passed",
+  "pytest": {
+    "passed": 162,
+    "warnings": 2
+  },
+  "stress": {
+    "prevented": 304,
+    "useful_drafts": 192
+  },
+  "break_aegis": {
+    "intervened": 7,
+    "isolated": 1,
+    "exposed": 2,
+    "benign_unchanged": 40
+  },
+  "performance": {
+    "identical_decisions": 845,
+    "text_cases": 1440
+  },
+  "fresh_environment_install": "requirements-lock and both editable packages succeeded",
+  "http_smoke": {
+    "allow_all_attack_success": true,
+    "aegis_attack_success": false,
+    "aegis_task_success": true
+  },
+  "public_repository": true,
+  "hosted_ci_run": "https://github.com/Soni-KR/indaba/actions/runs/35904607069",
+  "hosted_ci_conclusion": "success",
+  "hosted_ci_commit": "d2ce0a6c5af31d44a4686052d119a92966499c7f"
+}

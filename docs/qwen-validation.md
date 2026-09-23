@@ -1,3 +1,5 @@
+> Historical development note. For final September 23 metrics, public-access/CI status and submission readiness, see [the final technical report](technical-report.md). Results and timings below retain their original scope.
+
 # Qwen validation and exact configuration
 
 The PDF names `Qwen/Qwen3-8B`; the starter repository supplies an adapter, not model weights. This laptop has an RTX 5060 Laptop GPU with about 8 GB of VRAM and about 24 GB of system RAM. Full 16-bit 8B weights exceed its VRAM. The local alternative is the model publisher's Q4_K_M GGUF, about 5.03 GB.

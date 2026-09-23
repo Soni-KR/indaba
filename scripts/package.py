@@ -40,6 +40,7 @@ for directory in selected.values():
 files.add(ROOT / "artifacts/performance-comparison.json")
 for directory in (
     "performance-baseline",
+    "submission-verification-20260923",
     "20260922T185242761643Z",
     "20260922T185313998546Z",
     "20260922T181955149732Z",
