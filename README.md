@@ -41,7 +41,7 @@ If already cloned, run `git submodule update --init --recursive`. These commands
 
 ## Final baseline comparison (static MOCK, seed 0)
 
-The repository is public: https://github.com/Soni-KR/indaba. Hosted [GitHub Actions run 35904607069](https://github.com/Soni-KR/indaba/actions/runs/35904607069) succeeded on main at commit `d2ce0a6`; a Docker build is not claimed.
+The repository is public: https://github.com/Soni-KR/indaba. Hosted [GitHub Actions run 35913041723](https://github.com/Soni-KR/indaba/actions/runs/35913041723) succeeded on main at commit `19efa833`; a Docker build is not claimed.
 
 | Defense | Tasks | Successful attacks | FBR | TUI | Brier | p95 ms |
 |---|---|---|---|---|---|---|

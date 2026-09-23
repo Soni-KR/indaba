@@ -5,7 +5,7 @@ Completed:
 - [x] Team: **Mourad has lost a finger**.
 - [x] Members: **Mourad Kraiem**, **Mohamed Yassin ghaoui**, **Amine Fathallah**.
 - [x] Public repository: https://github.com/Soni-KR/indaba (anonymous API confirms public).
-- [x] Hosted main CI succeeded: [run 35904607069](https://github.com/Soni-KR/indaba/actions/runs/35904607069), commit d2ce0a6. No Docker build claim.
+- [x] Hosted main CI succeeded: [run 35913041723](https://github.com/Soni-KR/indaba/actions/runs/35913041723), commit 19efa833. No Docker build claim.
 - [x] [Technical report](technical-report.md) and [submission PDF](AEGIS-submission-report.pdf), including architecture, all template sections, current metrics, domains and digests.
 - [x] Latest static evidence: `artifacts/20260923T191236142234Z`; adaptive: `artifacts/20260923T191249640018Z`.
 - [x] Current two-scenario MOCK [video script](video-storyboard.md): `artifacts/20260923T191303750037Z`.
